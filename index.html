@@ -14,14 +14,14 @@ h1{margin:0;font-size:clamp(28px,6vw,50px);line-height:1.08}.lead{color:var(--mu
 @media(max-width:680px){body{padding:14px}.cards{grid-template-columns:1fr}.card{min-height:118px}.name{margin-top:14px}}
 </style>
 </head>
-<body><main class="wrap"><section class="panel"><h1>ランダムガジェットメーカー</h1><p class="lead">3つのガジェットをランダムに提案します。<br>スピード・パワー・テクニカルの<strong>3タイプすべてをまたぐ組み合わせは出ません。</strong></p><div id="cards" class="cards" aria-live="polite"></div><div class="actions"><button id="reroll">もう一度引く</button><span class="note">有効な330通りの組み合わせから均等に抽選します。</span></div></section><div class="footer">ページを開いたときにも自動で1回抽選します。</div></main>
+<body><main class="wrap"><section class="panel"><h1>ランダムガジェットメーカー</h1><p class="lead">3つのガジェットをランダムに提案します。<br>決められた<strong>6種類のタンク構成</strong>からのみ抽選します。</p><div id="cards" class="cards" aria-live="polite"></div><div class="actions"><button id="reroll">もう一度引く</button><span class="note">有効な180通りの組み合わせから均等に抽選します。</span></div></section><div class="footer">ページを開いたときにも自動で1回抽選します。</div></main>
 <script>
 const gadgets=[
 {tank:"スピードタンク",name:"カチコミシューズ"},{tank:"スピードタンク",name:"ダッシュボム"},{tank:"スピードタンク",name:"ジェットブーメラン"},{tank:"スピードタンク",name:"ジャンプボム"},{tank:"スピードタンク",name:"ニンジャワイヤー"},
 {tank:"パワータンク",name:"ズバットスラッシャー"},{tank:"パワータンク",name:"スピンホイール"},{tank:"パワータンク",name:"ヌリヌリサテライト"},{tank:"パワータンク",name:"メテオグローブ"},{tank:"パワータンク",name:"ウズマキバスター"},
 {tank:"テクニカルタンク",name:"スケットポット"},{tank:"テクニカルタンク",name:"ゴレンライナー"},{tank:"テクニカルタンク",name:"ツナガルバルーン"},{tank:"テクニカルタンク",name:"ヒッパレーザー"},{tank:"テクニカルタンク",name:"マキアゲスクリュー"}];
 const cls={"スピードタンク":"speed","パワータンク":"power","テクニカルタンク":"technical"};
-const valid=[];for(let i=0;i<gadgets.length-2;i++)for(let j=i+1;j<gadgets.length-1;j++)for(let k=j+1;k<gadgets.length;k++){const c=[gadgets[i],gadgets[j],gadgets[k]];if(new Set(c.map(x=>x.tank)).size<=2)valid.push(c)}
+const valid=[];function allowed(c){const n={"スピードタンク":0,"パワータンク":0,"テクニカルタンク":0};c.forEach(x=>n[x.tank]++);const s=n["スピードタンク"],p=n["パワータンク"],t=n["テクニカルタンク"];return(s===3&&p===0&&t===0)||(s===0&&p===3&&t===0)||(s===0&&p===0&&t===3)||(s===2&&p===0&&t===1)||(s===1&&p===2&&t===0)||(s===0&&p===1&&t===2)}for(let i=0;i<gadgets.length-2;i++)for(let j=i+1;j<gadgets.length-1;j++)for(let k=j+1;k<gadgets.length;k++){const c=[gadgets[i],gadgets[j],gadgets[k]];if(allowed(c))valid.push(c)}
 function idx(max){if(window.crypto&&crypto.getRandomValues){const lim=Math.floor(0x100000000/max)*max,a=new Uint32Array(1);do crypto.getRandomValues(a);while(a[0]>=lim);return a[0]%max}return Math.floor(Math.random()*max)}
 function draw(){const combo=valid[idx(valid.length)],root=document.getElementById('cards');root.innerHTML='';combo.forEach(g=>{const card=document.createElement('article');card.className='card '+cls[g.tank];card.innerHTML='<span class="tank"></span><div class="name"></div>';card.querySelector('.tank').textContent=g.tank;card.querySelector('.name').textContent=g.name;root.appendChild(card)})}
 document.getElementById('reroll').addEventListener('click',draw);draw();
