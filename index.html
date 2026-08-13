@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ランダムガジェットメーカー</title>
+<style>
+:root{color-scheme:dark;--bg:#0e1220;--panel:#171d2d;--text:#f4f7ff;--muted:#aab4ca;--line:rgba(255,255,255,.09)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;font-family:system-ui,-apple-system,"Segoe UI","Yu Gothic",Meiryo,sans-serif;color:var(--text);background:radial-gradient(circle at 18% 20%,rgba(74,133,255,.16),transparent 30%),radial-gradient(circle at 82% 72%,rgba(255,101,166,.13),transparent 30%),linear-gradient(145deg,#0b0f19,#11182a 58%,#0d1220)}
+.wrap{width:min(860px,100%)}.panel{padding:clamp(22px,5vw,44px);border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,rgba(25,31,49,.9),rgba(18,23,38,.94));box-shadow:0 20px 60px rgba(0,0,0,.35)}
+h1{margin:0;font-size:clamp(28px,6vw,50px);line-height:1.08}.lead{color:var(--muted);margin:12px 0 28px;line-height:1.75}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:8px 0 24px}.card{position:relative;overflow:hidden;min-height:158px;padding:18px;border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.035);display:flex;flex-direction:column;justify-content:space-between}.card:before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--accent)}
+.tank{display:inline-flex;align-self:flex-start;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;color:var(--accent-text);background:var(--accent-soft);border:1px solid var(--accent-border)}.name{font-size:clamp(20px,3.5vw,28px);font-weight:850;line-height:1.25;margin-top:20px;overflow-wrap:anywhere}
+.speed{--accent:#5ab4ff;--accent-soft:rgba(90,180,255,.14);--accent-border:rgba(90,180,255,.28);--accent-text:#a9d8ff}.power{--accent:#ff6b7a;--accent-soft:rgba(255,107,122,.14);--accent-border:rgba(255,107,122,.28);--accent-text:#ffb4bc}.technical{--accent:#b48cff;--accent-soft:rgba(180,140,255,.14);--accent-border:rgba(180,140,255,.28);--accent-text:#d3bdff}
+.actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}button{border:0;border-radius:14px;padding:13px 20px;font:inherit;font-weight:850;color:#09111f;background:#f4f7ff;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.25)}button:hover{transform:translateY(-1px)}button:active{transform:translateY(1px)}.note{color:var(--muted);font-size:13px;line-height:1.6}.footer{margin-top:15px;color:#7f899d;font-size:12px;text-align:center}
+@media(max-width:680px){body{padding:14px}.cards{grid-template-columns:1fr}.card{min-height:118px}.name{margin-top:14px}}
+</style>
+</head>
+<body><main class="wrap"><section class="panel"><h1>ランダムガジェットメーカー</h1><p class="lead">3つのガジェットをランダムに提案します。<br>スピード・パワー・テクニカルの<strong>3タイプすべてをまたぐ組み合わせは出ません。</strong></p><div id="cards" class="cards" aria-live="polite"></div><div class="actions"><button id="reroll">もう一度引く</button><span class="note">有効な330通りの組み合わせから均等に抽選します。</span></div></section><div class="footer">ページを開いたときにも自動で1回抽選します。</div></main>
+<script>
+const gadgets=[
+{tank:"スピードタンク",name:"カチコミシューズ"},{tank:"スピードタンク",name:"ダッシュボム"},{tank:"スピードタンク",name:"ジェットブーメラン"},{tank:"スピードタンク",name:"ジャンプボム"},{tank:"スピードタンク",name:"ニンジャワイヤー"},
+{tank:"パワータンク",name:"ズバットスラッシャー"},{tank:"パワータンク",name:"スピンホイール"},{tank:"パワータンク",name:"ヌリヌリサテライト"},{tank:"パワータンク",name:"メテオグローブ"},{tank:"パワータンク",name:"ウズマキバスター"},
+{tank:"テクニカルタンク",name:"スケットポット"},{tank:"テクニカルタンク",name:"ゴレンライナー"},{tank:"テクニカルタンク",name:"ツナガルバルーン"},{tank:"テクニカルタンク",name:"ヒッパレーザー"},{tank:"テクニカルタンク",name:"マキアゲスクリュー"}];
+const cls={"スピードタンク":"speed","パワータンク":"power","テクニカルタンク":"technical"};
+const valid=[];for(let i=0;i<gadgets.length-2;i++)for(let j=i+1;j<gadgets.length-1;j++)for(let k=j+1;k<gadgets.length;k++){const c=[gadgets[i],gadgets[j],gadgets[k]];if(new Set(c.map(x=>x.tank)).size<=2)valid.push(c)}
+function idx(max){if(window.crypto&&crypto.getRandomValues){const lim=Math.floor(0x100000000/max)*max,a=new Uint32Array(1);do crypto.getRandomValues(a);while(a[0]>=lim);return a[0]%max}return Math.floor(Math.random()*max)}
+function draw(){const combo=valid[idx(valid.length)],root=document.getElementById('cards');root.innerHTML='';combo.forEach(g=>{const card=document.createElement('article');card.className='card '+cls[g.tank];card.innerHTML='<span class="tank"></span><div class="name"></div>';card.querySelector('.tank').textContent=g.tank;card.querySelector('.name').textContent=g.name;root.appendChild(card)})}
+document.getElementById('reroll').addEventListener('click',draw);draw();
+</script></body></html>
