@@ -14,7 +14,7 @@ h1{margin:0;font-size:clamp(28px,6vw,50px);line-height:1.08}.lead{color:var(--mu
 @media(max-width:680px){body{padding:14px}.cards{grid-template-columns:1fr}.card{min-height:118px}.name{margin-top:14px}}
 </style>
 </head>
-<body><main class="wrap"><section class="panel"><h1>ランダムガジェットメーカー</h1><p class="lead">3つのガジェットをランダムに提案します。<br>決められた<strong>6種類のタンク構成</strong>からのみ抽選します。</p><div id="cards" class="cards" aria-live="polite"></div><div class="actions"><button id="reroll">もう一度引く</button><span class="note">有効な180通りの組み合わせから均等に抽選します。</span></div></section><div class="footer">ページを開いたときにも自動で1回抽選します。</div></main>
+<body><main class="wrap"><section class="panel"><h1>ランダムガジェットメーカー</h1><p class="lead">3つのガジェットをランダムに提案します。<br>存在する<strong>タンク構成</strong>からのみ抽選します。</p><div id="cards" class="cards" aria-live="polite"></div><div class="actions"><button id="reroll">もう一度引く</button><span class="note">有効な180通りの組み合わせから均等に抽選します。</span></div></section><div class="footer">ページを開いたときにも自動で1回抽選します。</div></main>
 <script>
 const gadgets=[
 {tank:"スピードタンク",name:"カチコミシューズ"},{tank:"スピードタンク",name:"ダッシュボム"},{tank:"スピードタンク",name:"ジェットブーメラン"},{tank:"スピードタンク",name:"ジャンプボム"},{tank:"スピードタンク",name:"ニンジャワイヤー"},
